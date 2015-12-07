@@ -88,11 +88,14 @@ namespace SynchUpdatedFiles
         private void XuTest1_Click(object sender, EventArgs e)
         {
             var left = new DirectoryInfo(@"C:\DevBackend\M_Backend-Master\_dll_GtxBackendLevel3");
+            left = new DirectoryInfo(@"C:\GitRepositories\BackendR9");
+
             var right = new DirectoryInfo(@"C:\DevFrontend\R6-Frontend_2015-06-01\bin");
+            right = new DirectoryInfo(@"C:\GitRepositories\BackendR9\_dll_GtxBackendLevel3");
             //var right = new DirectoryInfo(@"C:\DevFrontend\M_Frontend-Master\bin");
 
 
-            var api = new RepositoryApi {Left = left, Right = right};
+            var api = new RepositoryApi { Left = left, Right = right };
             var filecount = api.Analyze();
             var x = api.FileList;
 
@@ -101,43 +104,49 @@ namespace SynchUpdatedFiles
 
             //var x3 = x.Select(t => t.FileVersionLeft.CompareTo(t.FileVersionRight) != 0).ToList();
 
-            var unequalFileList = x.Where(metadata => metadata.FileVersionLeft.CompareTo(metadata.FileVersionRight) != 0).ToList();
+            //var unequalFileList = x.Where(metadata => metadata.FileVersionRight.CompareTo(metadata.FileVersionLeft) == 0).ToList();
+            var unequalFileList = x;
 
             Table = new List<Row>();
 
             foreach (var fileMetadata in unequalFileList)
             {
-                var t1 = fileMetadata.FileVersionLeft.CompareTo(fileMetadata.FileVersionRight);
+                var t1 = fileMetadata.FileVersionRight.CompareTo(fileMetadata.FileVersionLeft);
 
                 var direction = Direction.Identical;
 
                 if (t1 > 0)
                 {
-                    direction = Direction.Right;
+                    direction = Direction.Left;
                 }
                 else if (t1 < 0)
                 {
-                    direction = Direction.Left;
+                    direction = Direction.Right;
                 }
 
                 Table.Add(
                     new Row
                     {
                         Direction = direction
-                        ,Filename = fileMetadata.Filename
-                        ,LeftVersion = fileMetadata.FileVersionLeft.ToString()
-                        , RightVersion = fileMetadata.FileVersionRight.ToString()
+                        ,
+                        Filename = fileMetadata.Filename
+                        ,
+                        LeftVersion = fileMetadata.FileVersionLeft != null ? fileMetadata.FileVersionLeft.ToString() : "na"
+                        ,
+                        RightVersion = fileMetadata.FileVersionRight.ToString()
                     }
                 );
 
-                XuTable.BeginEdit(true);
-
-                XuTable.DataSource = Table;
-
-                XuTable.EndEdit();
-                Update();
             }
-            
+
+
+            XuTable.BeginEdit(true);
+
+            XuTable.DataSource = Table;
+
+            XuTable.EndEdit();
+            Update();
+
 
             var z4 = unequalFileList;
         }

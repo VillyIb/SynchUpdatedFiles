@@ -30,11 +30,11 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.XuTable = new System.Windows.Forms.DataGridView();
+            this.XuTest1 = new System.Windows.Forms.Button();
             this.XcFilename = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.XcLeftVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.XcDirection = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.XcRightVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.XuTest1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.XuTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,15 +46,25 @@
             this.XcLeftVersion,
             this.XcDirection,
             this.XcRightVersion});
-            this.XuTable.Location = new System.Drawing.Point(45, 51);
+            this.XuTable.Location = new System.Drawing.Point(75, 48);
             this.XuTable.Name = "XuTable";
-            this.XuTable.Size = new System.Drawing.Size(443, 150);
+            this.XuTable.Size = new System.Drawing.Size(617, 268);
             this.XuTable.TabIndex = 0;
             this.XuTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.XuTable_CellContentClick);
             this.XuTable.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.XuTable_CellContentDoubleClick);
             this.XuTable.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.XuTable_CellDoubleClick);
             this.XuTable.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.XuTable_CellMouseClick);
             this.XuTable.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.XuTable_CellMouseDoubleClick);
+            // 
+            // XuTest1
+            // 
+            this.XuTest1.Location = new System.Drawing.Point(587, 350);
+            this.XuTest1.Name = "XuTest1";
+            this.XuTest1.Size = new System.Drawing.Size(75, 23);
+            this.XuTest1.TabIndex = 1;
+            this.XuTest1.Text = "XuTest1";
+            this.XuTest1.UseVisualStyleBackColor = true;
+            this.XuTest1.Click += new System.EventHandler(this.XuTest1_Click);
             // 
             // XcFilename
             // 
@@ -63,9 +73,10 @@
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Blue;
             this.XcFilename.DefaultCellStyle = dataGridViewCellStyle1;
             this.XcFilename.HeaderText = "Filename";
-            this.XcFilename.MinimumWidth = 100;
+            this.XcFilename.MinimumWidth = 200;
             this.XcFilename.Name = "XcFilename";
             this.XcFilename.ReadOnly = true;
+            this.XcFilename.Width = 200;
             // 
             // XcLeftVersion
             // 
@@ -90,16 +101,6 @@
             this.XcRightVersion.Name = "XcRightVersion";
             this.XcRightVersion.ReadOnly = true;
             // 
-            // XuTest1
-            // 
-            this.XuTest1.Location = new System.Drawing.Point(587, 350);
-            this.XuTest1.Name = "XuTest1";
-            this.XuTest1.Size = new System.Drawing.Size(75, 23);
-            this.XuTest1.TabIndex = 1;
-            this.XuTest1.Text = "XuTest1";
-            this.XuTest1.UseVisualStyleBackColor = true;
-            this.XuTest1.Click += new System.EventHandler(this.XuTest1_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -118,12 +119,11 @@
         #endregion
 
         private System.Windows.Forms.DataGridView XuTable;
+        private System.Windows.Forms.Button XuTest1;
         private System.Windows.Forms.DataGridViewTextBoxColumn XcFilename;
         private System.Windows.Forms.DataGridViewTextBoxColumn XcLeftVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn XcDirection;
         private System.Windows.Forms.DataGridViewTextBoxColumn XcRightVersion;
-        private System.Windows.Forms.Button XuTest1;
-
     }
 }
 

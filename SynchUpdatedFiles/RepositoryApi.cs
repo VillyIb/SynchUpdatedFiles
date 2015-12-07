@@ -24,11 +24,14 @@ namespace SynchUpdatedFiles
 
         public int CompareTo(FileVersion other)
         {
-            var result = Major.CompareTo(other.Major);
-            result = result == 0 ? Minor.CompareTo(other.Minor) : result;
-            result = result == 0 ? Build.CompareTo(other.Build) : result;
-            result = result == 0 ? Private.CompareTo(other.Private) : result;
-
+            var result = -1;
+            if (other != null)
+            {
+                result = Major.CompareTo(other.Major);
+                result = result == 0 ? Minor.CompareTo(other.Minor) : result;
+                result = result == 0 ? Build.CompareTo(other.Build) : result;
+                result = result == 0 ? Private.CompareTo(other.Private) : result;
+            }
             return result;
         }
 
@@ -80,32 +83,70 @@ namespace SynchUpdatedFiles
         }
 
 
+        /// <summary>
+        /// Source directory
+        /// </summary>
         public DirectoryInfo Left { get; set; }
 
+        /// <summary>
+        /// Target directory
+        /// </summary>
         public DirectoryInfo Right { get; set; }
 
         public List<FileMetadata> FileList { get; set; }
 
+        private List<FileInfo> FileListRight { get; set; }
+
         private List<FileInfo> FileListLeft { get; set; }
+
+
+        private void BuildFileListLeft(DirectoryInfo current)
+        {
+            if (".git".Equals(current.Name)) { return; }
+            if ("packages".Equals(current.Name)) { return; }
+            if (".nuget".Equals(current.Name)) { return; }
+            if (".vs".Equals(current.Name)) { return; }
+
+            if (current.FullName.EndsWith(@"bin\Release"))
+            {
+                var dllFiles = current.GetFiles("*.dll");
+                FileListLeft.AddRange(dllFiles);
+            }
+
+            var subdirs = current.GetDirectories();
+            foreach(var dir in subdirs)
+            {
+                BuildFileListLeft(dir);
+            }
+        }
+
 
         public int Analyze()
         {
-            FileListLeft = Left.GetFiles("*.dll").ToList();
+            FileListRight = Right.GetFiles("*.dll").ToList();
+
+            FileListLeft = new List<FileInfo>();
+            BuildFileListLeft(Left);
+
             FileList = new List<FileMetadata>();
 
-            foreach (var fileInfo in FileListLeft)
+            foreach (var fileInfo in FileListRight)
             {
                 var t1 = new FileMetadata();
                 FileVersion fv;
 
-                if (Read(out fv, Left.FullName, fileInfo.Name))
+                if (Read(out fv, Right.FullName, fileInfo.Name))
                 {
                     t1.Filename = fileInfo.Name;
-                    t1.FileVersionLeft = fv;
+                    t1.FileVersionRight = fv;
 
-                    if (Read(out fv, Right.FullName, fileInfo.Name))
+                    // find matching file in left
+
+                    var left = FileListLeft.FirstOrDefault(t => t.Name.Equals(fileInfo.Name));
+
+                    if ( left!=null &&  Read(out fv, left.DirectoryName, left.Name))
                     {
-                        t1.FileVersionRight = fv;
+                        t1.FileVersionLeft = fv;
                         FileList.Add(t1);
                     }
                 }

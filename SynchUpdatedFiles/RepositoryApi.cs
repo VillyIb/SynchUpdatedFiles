@@ -43,9 +43,9 @@ namespace SynchUpdatedFiles
     {
         public string Filename { get; set; }
 
-        public FileVersion FileVersionLeft { get; set; }
+        public FileVersion FileVersionTarget { get; set; }
 
-        public FileVersion FileVersionRight { get; set; }
+        public FileVersion FileVersionSource { get; set; }
     }
 
 
@@ -79,33 +79,47 @@ namespace SynchUpdatedFiles
             return result;
         }
 
+        public static bool ReadDeep(out FileVersion fileVersion, string directory, string filename)
+        {
+            var di = new DirectoryInfo(directory);
+            var fileList = di.GetFiles(filename, SearchOption.AllDirectories);
+            if (fileList.Length == 1)
+            {
+                var current = fileList[0];
+                return Read(out fileVersion, current.DirectoryName, filename);
+            }
 
-        public DirectoryInfo Left { get; set; }
+            fileVersion = null;
+            return false;
+        }
 
-        public DirectoryInfo Right { get; set; }
+
+        public DirectoryInfo TargetDirectory { get; set; }
+
+        public DirectoryInfo SourceDirectory { get; set; }
 
         public List<FileMetadata> FileList { get; set; }
 
-        private List<FileInfo> FileListLeft { get; set; }
+        private List<FileInfo> TargetDirectoryList { get; set; }
 
         public int Analyze()
         {
-            FileListLeft = Left.GetFiles("*.dll").ToList();
+            TargetDirectoryList = TargetDirectory.GetFiles("*.dll").ToList();
             FileList = new List<FileMetadata>();
 
-            foreach (var fileInfo in FileListLeft)
+            foreach (var fileInfo in TargetDirectoryList)
             {
                 var t1 = new FileMetadata();
                 FileVersion fv;
 
-                if (Read(out fv, Left.FullName, fileInfo.Name))
+                if (Read(out fv, TargetDirectory.FullName, fileInfo.Name))
                 {
                     t1.Filename = fileInfo.Name;
-                    t1.FileVersionLeft = fv;
+                    t1.FileVersionTarget = fv;
 
-                    if (Read(out fv, Right.FullName, fileInfo.Name))
+                    if (ReadDeep(out fv, SourceDirectory.FullName, fileInfo.Name))
                     {
-                        t1.FileVersionRight = fv;
+                        t1.FileVersionSource = fv;
                         FileList.Add(t1);
                     }
                 }

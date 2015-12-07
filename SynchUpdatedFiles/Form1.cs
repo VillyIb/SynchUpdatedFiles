@@ -10,9 +10,15 @@ namespace SynchUpdatedFiles
     {
         private List<Row> Table { get; set; }
 
+        private Settings Settings{ get; set; }      
+
         public Form1()
         {
             InitializeComponent();
+            Settings = new Settings();
+
+            XuTargetFolder.Text = Settings.TargetFolder;
+            XuSourceFolder.Text  = Settings.SourceFolder;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -87,27 +93,27 @@ namespace SynchUpdatedFiles
 
         private void XuTest1_Click(object sender, EventArgs e)
         {
-            var left = new DirectoryInfo(@"C:\DevBackend\M_Backend-Master\_dll_GtxBackendLevel3");
-            var right = new DirectoryInfo(@"C:\DevFrontend\R6-Frontend_2015-06-01\bin");
+            var target = new DirectoryInfo(XuTargetFolder.Text);
+            var source = new DirectoryInfo(XuSourceFolder.Text);
             //var right = new DirectoryInfo(@"C:\DevFrontend\M_Frontend-Master\bin");
 
 
-            var api = new RepositoryApi {Left = left, Right = right};
+            var api = new RepositoryApi {TargetDirectory = target, SourceDirectory = source};
             var filecount = api.Analyze();
             var x = api.FileList;
 
             var z1 = x;
             var z2 = filecount;
 
-            //var x3 = x.Select(t => t.FileVersionLeft.CompareTo(t.FileVersionRight) != 0).ToList();
+            //var x3 = x.Select(t => t.FileVersionTarget.CompareTo(t.FileVersionSource) != 0).ToList();
 
-            var unequalFileList = x.Where(metadata => metadata.FileVersionLeft.CompareTo(metadata.FileVersionRight) != 0).ToList();
+            var unEqualFileList = x.Where(metadata => metadata.FileVersionTarget.CompareTo(metadata.FileVersionSource) != 0).ToList();
 
             Table = new List<Row>();
 
-            foreach (var fileMetadata in unequalFileList)
+            foreach (var fileMetadata in unEqualFileList)
             {
-                var t1 = fileMetadata.FileVersionLeft.CompareTo(fileMetadata.FileVersionRight);
+                var t1 = fileMetadata.FileVersionTarget.CompareTo(fileMetadata.FileVersionSource);
 
                 var direction = Direction.Identical;
 
@@ -125,8 +131,8 @@ namespace SynchUpdatedFiles
                     {
                         Direction = direction
                         ,Filename = fileMetadata.Filename
-                        ,LeftVersion = fileMetadata.FileVersionLeft.ToString()
-                        , RightVersion = fileMetadata.FileVersionRight.ToString()
+                        ,LeftVersion = fileMetadata.FileVersionTarget.ToString()
+                        , RightVersion = fileMetadata.FileVersionSource.ToString()
                     }
                 );
 
@@ -139,7 +145,28 @@ namespace SynchUpdatedFiles
             }
             
 
-            var z4 = unequalFileList;
+            var z4 = unEqualFileList;
+        }
+
+        private void XuTargetFolderBrowse_Click(object sender, EventArgs e)
+        {
+            //XuFolderBrowser.RootFolder = XuTargetFolder.Text;
+            XuFolderBrowser.ShowNewFolderButton = false;
+            //XuFolderBrowser.RootFolder = Environment.SpecialFolder.Favorites;
+            XuFolderBrowser.SelectedPath = XuTargetFolder.Text;
+            XuFolderBrowser.ShowDialog();
+            XuTargetFolder.Text = XuFolderBrowser.SelectedPath;
+            Settings.TargetFolder = XuTargetFolder.Text;
+            Settings.Save();
+        }
+
+        private void XuSourceFolderBrowse_Click(object sender, EventArgs e)
+        {
+            XuFolderBrowser.SelectedPath = XuSourceFolder.Text;
+            XuFolderBrowser.ShowDialog();
+            XuSourceFolder.Text = XuFolderBrowser.SelectedPath;
+            Settings.SourceFolder = XuSourceFolder.Text;
+            Settings.Save();
         }
 
 

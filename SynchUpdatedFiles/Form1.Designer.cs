@@ -28,13 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.XuTable = new System.Windows.Forms.DataGridView();
+            this.XuTest1 = new System.Windows.Forms.Button();
             this.XcFilename = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.XcLeftVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.XcDirection = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.XcRightVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.XuTest1 = new System.Windows.Forms.Button();
+            this.XuFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            this.label1 = new System.Windows.Forms.Label();
+            this.XuTargetFolder = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.XuSourceFolder = new System.Windows.Forms.TextBox();
+            this.XuTargetFolderBrowse = new System.Windows.Forms.Button();
+            this.XuSourceFolderBrowse = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.XuTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,9 +53,9 @@
             this.XcLeftVersion,
             this.XcDirection,
             this.XcRightVersion});
-            this.XuTable.Location = new System.Drawing.Point(45, 51);
+            this.XuTable.Location = new System.Drawing.Point(48, 326);
             this.XuTable.Name = "XuTable";
-            this.XuTable.Size = new System.Drawing.Size(443, 150);
+            this.XuTable.Size = new System.Drawing.Size(487, 150);
             this.XuTable.TabIndex = 0;
             this.XuTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.XuTable_CellContentClick);
             this.XuTable.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.XuTable_CellContentDoubleClick);
@@ -56,43 +63,9 @@
             this.XuTable.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.XuTable_CellMouseClick);
             this.XuTable.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.XuTable_CellMouseDoubleClick);
             // 
-            // XcFilename
-            // 
-            this.XcFilename.DataPropertyName = "Filename";
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Yellow;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Blue;
-            this.XcFilename.DefaultCellStyle = dataGridViewCellStyle1;
-            this.XcFilename.HeaderText = "Filename";
-            this.XcFilename.MinimumWidth = 100;
-            this.XcFilename.Name = "XcFilename";
-            this.XcFilename.ReadOnly = true;
-            // 
-            // XcLeftVersion
-            // 
-            this.XcLeftVersion.DataPropertyName = "LeftVersion";
-            this.XcLeftVersion.HeaderText = "LeftVersion";
-            this.XcLeftVersion.MinimumWidth = 100;
-            this.XcLeftVersion.Name = "XcLeftVersion";
-            this.XcLeftVersion.ReadOnly = true;
-            // 
-            // XcDirection
-            // 
-            this.XcDirection.DataPropertyName = "Direction";
-            this.XcDirection.HeaderText = "Direction";
-            this.XcDirection.MinimumWidth = 100;
-            this.XcDirection.Name = "XcDirection";
-            // 
-            // XcRightVersion
-            // 
-            this.XcRightVersion.DataPropertyName = "RightVersion";
-            this.XcRightVersion.HeaderText = "RightVersion";
-            this.XcRightVersion.MinimumWidth = 100;
-            this.XcRightVersion.Name = "XcRightVersion";
-            this.XcRightVersion.ReadOnly = true;
-            // 
             // XuTest1
             // 
-            this.XuTest1.Location = new System.Drawing.Point(587, 350);
+            this.XuTest1.Location = new System.Drawing.Point(662, 539);
             this.XuTest1.Name = "XuTest1";
             this.XuTest1.Size = new System.Drawing.Size(75, 23);
             this.XuTest1.TabIndex = 1;
@@ -100,11 +73,107 @@
             this.XuTest1.UseVisualStyleBackColor = true;
             this.XuTest1.Click += new System.EventHandler(this.XuTest1_Click);
             // 
+            // XcFilename
+            // 
+            this.XcFilename.DataPropertyName = "Filename";
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Yellow;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Blue;
+            this.XcFilename.DefaultCellStyle = dataGridViewCellStyle3;
+            this.XcFilename.HeaderText = "Filename";
+            this.XcFilename.MinimumWidth = 110;
+            this.XcFilename.Name = "XcFilename";
+            this.XcFilename.ReadOnly = true;
+            this.XcFilename.Width = 110;
+            // 
+            // XcLeftVersion
+            // 
+            this.XcLeftVersion.DataPropertyName = "Target version";
+            this.XcLeftVersion.HeaderText = "Target version";
+            this.XcLeftVersion.MinimumWidth = 110;
+            this.XcLeftVersion.Name = "XcLeftVersion";
+            this.XcLeftVersion.ReadOnly = true;
+            this.XcLeftVersion.Width = 110;
+            // 
+            // XcDirection
+            // 
+            this.XcDirection.DataPropertyName = "Direction";
+            this.XcDirection.HeaderText = "Direction";
+            this.XcDirection.MinimumWidth = 110;
+            this.XcDirection.Name = "XcDirection";
+            this.XcDirection.Width = 110;
+            // 
+            // XcRightVersion
+            // 
+            this.XcRightVersion.DataPropertyName = "Source Version";
+            this.XcRightVersion.HeaderText = "Source version";
+            this.XcRightVersion.MinimumWidth = 110;
+            this.XcRightVersion.Name = "XcRightVersion";
+            this.XcRightVersion.ReadOnly = true;
+            this.XcRightVersion.Width = 110;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(45, 59);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(67, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Target folder";
+            // 
+            // XuTargetFolder
+            // 
+            this.XuTargetFolder.Location = new System.Drawing.Point(145, 59);
+            this.XuTargetFolder.Name = "XuTargetFolder";
+            this.XuTargetFolder.Size = new System.Drawing.Size(390, 20);
+            this.XuTargetFolder.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(45, 113);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(70, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Source folder";
+            // 
+            // XuSourceFolder
+            // 
+            this.XuSourceFolder.Location = new System.Drawing.Point(145, 113);
+            this.XuSourceFolder.Name = "XuSourceFolder";
+            this.XuSourceFolder.Size = new System.Drawing.Size(390, 20);
+            this.XuSourceFolder.TabIndex = 5;
+            // 
+            // XuTargetFolderBrowse
+            // 
+            this.XuTargetFolderBrowse.Location = new System.Drawing.Point(573, 59);
+            this.XuTargetFolderBrowse.Name = "XuTargetFolderBrowse";
+            this.XuTargetFolderBrowse.Size = new System.Drawing.Size(75, 23);
+            this.XuTargetFolderBrowse.TabIndex = 6;
+            this.XuTargetFolderBrowse.Text = "Browse";
+            this.XuTargetFolderBrowse.UseVisualStyleBackColor = true;
+            this.XuTargetFolderBrowse.Click += new System.EventHandler(this.XuTargetFolderBrowse_Click);
+            // 
+            // XuSourceFolderBrowse
+            // 
+            this.XuSourceFolderBrowse.Location = new System.Drawing.Point(573, 113);
+            this.XuSourceFolderBrowse.Name = "XuSourceFolderBrowse";
+            this.XuSourceFolderBrowse.Size = new System.Drawing.Size(75, 23);
+            this.XuSourceFolderBrowse.TabIndex = 7;
+            this.XuSourceFolderBrowse.Text = "Browse";
+            this.XuSourceFolderBrowse.UseVisualStyleBackColor = true;
+            this.XuSourceFolderBrowse.Click += new System.EventHandler(this.XuSourceFolderBrowse_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(877, 607);
+            this.Controls.Add(this.XuSourceFolderBrowse);
+            this.Controls.Add(this.XuTargetFolderBrowse);
+            this.Controls.Add(this.XuSourceFolder);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.XuTargetFolder);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.XuTest1);
             this.Controls.Add(this.XuTable);
             this.Name = "Form1";
@@ -112,17 +181,25 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.XuTable)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.DataGridView XuTable;
+        private System.Windows.Forms.Button XuTest1;
         private System.Windows.Forms.DataGridViewTextBoxColumn XcFilename;
         private System.Windows.Forms.DataGridViewTextBoxColumn XcLeftVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn XcDirection;
         private System.Windows.Forms.DataGridViewTextBoxColumn XcRightVersion;
-        private System.Windows.Forms.Button XuTest1;
+        private System.Windows.Forms.FolderBrowserDialog XuFolderBrowser;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox XuTargetFolder;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox XuSourceFolder;
+        private System.Windows.Forms.Button XuTargetFolderBrowse;
+        private System.Windows.Forms.Button XuSourceFolderBrowse;
 
     }
 }

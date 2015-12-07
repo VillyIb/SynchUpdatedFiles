@@ -10,9 +10,15 @@ namespace SynchUpdatedFiles
     {
         private List<Row> Table { get; set; }
 
+        private Settings Settings{ get; set; }      
+
         public Form1()
         {
             InitializeComponent();
+            Settings = new Settings();
+
+            XuTargetFolder.Text = Settings.TargetFolder;
+            XuSourceFolder.Text  = Settings.SourceFolder;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -87,68 +93,80 @@ namespace SynchUpdatedFiles
 
         private void XuTest1_Click(object sender, EventArgs e)
         {
-            var left = new DirectoryInfo(@"C:\DevBackend\M_Backend-Master\_dll_GtxBackendLevel3");
-            left = new DirectoryInfo(@"C:\GitRepositories\BackendR9");
-
-            var right = new DirectoryInfo(@"C:\DevFrontend\R6-Frontend_2015-06-01\bin");
-            right = new DirectoryInfo(@"C:\GitRepositories\BackendR9\_dll_GtxBackendLevel3");
+            var target = new DirectoryInfo(XuTargetFolder.Text);
+            var source = new DirectoryInfo(XuSourceFolder.Text);
             //var right = new DirectoryInfo(@"C:\DevFrontend\M_Frontend-Master\bin");
 
 
-            var api = new RepositoryApi { Left = left, Right = right };
+            var api = new RepositoryApi {TargetDirectory = target, SourceDirectory = source};
             var filecount = api.Analyze();
             var x = api.FileList;
 
             var z1 = x;
             var z2 = filecount;
 
-            //var x3 = x.Select(t => t.FileVersionLeft.CompareTo(t.FileVersionRight) != 0).ToList();
+            //var x3 = x.Select(t => t.FileVersionTarget.CompareTo(t.FileVersionSource) != 0).ToList();
 
-            //var unequalFileList = x.Where(metadata => metadata.FileVersionRight.CompareTo(metadata.FileVersionLeft) == 0).ToList();
-            var unequalFileList = x;
+            var unEqualFileList = x.Where(metadata => metadata.FileVersionTarget.CompareTo(metadata.FileVersionSource) != 0).ToList();
 
             Table = new List<Row>();
 
-            foreach (var fileMetadata in unequalFileList)
+            foreach (var fileMetadata in unEqualFileList)
             {
-                var t1 = fileMetadata.FileVersionRight.CompareTo(fileMetadata.FileVersionLeft);
+                var t1 = fileMetadata.FileVersionTarget.CompareTo(fileMetadata.FileVersionSource);
 
                 var direction = Direction.Identical;
 
                 if (t1 > 0)
                 {
-                    direction = Direction.Left;
+                    direction = Direction.Right;
                 }
                 else if (t1 < 0)
                 {
-                    direction = Direction.Right;
+                    direction = Direction.Left;
                 }
 
                 Table.Add(
                     new Row
                     {
                         Direction = direction
-                        ,
-                        Filename = fileMetadata.Filename
-                        ,
-                        LeftVersion = fileMetadata.FileVersionLeft != null ? fileMetadata.FileVersionLeft.ToString() : "na"
-                        ,
-                        RightVersion = fileMetadata.FileVersionRight.ToString()
+                        ,Filename = fileMetadata.Filename
+                        ,LeftVersion = fileMetadata.FileVersionTarget.ToString()
+                        , RightVersion = fileMetadata.FileVersionSource.ToString()
                     }
                 );
 
+                XuTable.BeginEdit(true);
+
+                XuTable.DataSource = Table;
+
+                XuTable.EndEdit();
+                Update();
             }
+            
 
+            var z4 = unEqualFileList;
+        }
 
-            XuTable.BeginEdit(true);
+        private void XuTargetFolderBrowse_Click(object sender, EventArgs e)
+        {
+            //XuFolderBrowser.RootFolder = XuTargetFolder.Text;
+            XuFolderBrowser.ShowNewFolderButton = false;
+            //XuFolderBrowser.RootFolder = Environment.SpecialFolder.Favorites;
+            XuFolderBrowser.SelectedPath = XuTargetFolder.Text;
+            XuFolderBrowser.ShowDialog();
+            XuTargetFolder.Text = XuFolderBrowser.SelectedPath;
+            Settings.TargetFolder = XuTargetFolder.Text;
+            Settings.Save();
+        }
 
-            XuTable.DataSource = Table;
-
-            XuTable.EndEdit();
-            Update();
-
-
-            var z4 = unequalFileList;
+        private void XuSourceFolderBrowse_Click(object sender, EventArgs e)
+        {
+            XuFolderBrowser.SelectedPath = XuSourceFolder.Text;
+            XuFolderBrowser.ShowDialog();
+            XuSourceFolder.Text = XuFolderBrowser.SelectedPath;
+            Settings.SourceFolder = XuSourceFolder.Text;
+            Settings.Save();
         }
 
 

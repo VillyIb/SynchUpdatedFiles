@@ -28,13 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.XuTable = new System.Windows.Forms.DataGridView();
             this.XuTest1 = new System.Windows.Forms.Button();
-            this.XcFilename = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.XcLeftVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.XcDirection = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.XcRightVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.XuFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.XuTargetFolder = new System.Windows.Forms.TextBox();
@@ -42,7 +38,19 @@
             this.XuSourceFolder = new System.Windows.Forms.TextBox();
             this.XuTargetFolderBrowse = new System.Windows.Forms.Button();
             this.XuSourceFolderBrowse = new System.Windows.Forms.Button();
+            this.XcFilename = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.XcLeftVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.XcDirection = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.XcRightVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.XuSynch = new System.Windows.Forms.Button();
+            this.XuClose = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.XuShowOlder = new System.Windows.Forms.CheckBox();
+            this.XuShowEqual = new System.Windows.Forms.CheckBox();
+            this.XuShowNewer = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.XuTable)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // XuTable
@@ -55,7 +63,7 @@
             this.XcRightVersion});
             this.XuTable.Location = new System.Drawing.Point(48, 326);
             this.XuTable.Name = "XuTable";
-            this.XuTable.Size = new System.Drawing.Size(487, 150);
+            this.XuTable.Size = new System.Drawing.Size(772, 579);
             this.XuTable.TabIndex = 0;
             this.XuTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.XuTable_CellContentClick);
             this.XuTable.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.XuTable_CellContentDoubleClick);
@@ -65,51 +73,13 @@
             // 
             // XuTest1
             // 
-            this.XuTest1.Location = new System.Drawing.Point(662, 539);
+            this.XuTest1.Location = new System.Drawing.Point(573, 177);
             this.XuTest1.Name = "XuTest1";
             this.XuTest1.Size = new System.Drawing.Size(75, 23);
             this.XuTest1.TabIndex = 1;
-            this.XuTest1.Text = "XuTest1";
+            this.XuTest1.Text = "Compare";
             this.XuTest1.UseVisualStyleBackColor = true;
             this.XuTest1.Click += new System.EventHandler(this.XuTest1_Click);
-            // 
-            // XcFilename
-            // 
-            this.XcFilename.DataPropertyName = "Filename";
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Yellow;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Blue;
-            this.XcFilename.DefaultCellStyle = dataGridViewCellStyle3;
-            this.XcFilename.HeaderText = "Filename";
-            this.XcFilename.MinimumWidth = 110;
-            this.XcFilename.Name = "XcFilename";
-            this.XcFilename.ReadOnly = true;
-            this.XcFilename.Width = 110;
-            // 
-            // XcLeftVersion
-            // 
-            this.XcLeftVersion.DataPropertyName = "Target version";
-            this.XcLeftVersion.HeaderText = "Target version";
-            this.XcLeftVersion.MinimumWidth = 110;
-            this.XcLeftVersion.Name = "XcLeftVersion";
-            this.XcLeftVersion.ReadOnly = true;
-            this.XcLeftVersion.Width = 110;
-            // 
-            // XcDirection
-            // 
-            this.XcDirection.DataPropertyName = "Direction";
-            this.XcDirection.HeaderText = "Direction";
-            this.XcDirection.MinimumWidth = 110;
-            this.XcDirection.Name = "XcDirection";
-            this.XcDirection.Width = 110;
-            // 
-            // XcRightVersion
-            // 
-            this.XcRightVersion.DataPropertyName = "Source Version";
-            this.XcRightVersion.HeaderText = "Source version";
-            this.XcRightVersion.MinimumWidth = 110;
-            this.XcRightVersion.Name = "XcRightVersion";
-            this.XcRightVersion.ReadOnly = true;
-            this.XcRightVersion.Width = 110;
             // 
             // label1
             // 
@@ -163,11 +133,133 @@
             this.XuSourceFolderBrowse.UseVisualStyleBackColor = true;
             this.XuSourceFolderBrowse.Click += new System.EventHandler(this.XuSourceFolderBrowse_Click);
             // 
+            // XcFilename
+            // 
+            this.XcFilename.DataPropertyName = "Filename";
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Yellow;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Blue;
+            this.XcFilename.DefaultCellStyle = dataGridViewCellStyle4;
+            this.XcFilename.HeaderText = "Filename";
+            this.XcFilename.MinimumWidth = 300;
+            this.XcFilename.Name = "XcFilename";
+            this.XcFilename.ReadOnly = true;
+            this.XcFilename.Width = 300;
+            // 
+            // XcLeftVersion
+            // 
+            this.XcLeftVersion.DataPropertyName = "TargetVersion";
+            this.XcLeftVersion.HeaderText = "Target version";
+            this.XcLeftVersion.MinimumWidth = 110;
+            this.XcLeftVersion.Name = "XcLeftVersion";
+            this.XcLeftVersion.ReadOnly = true;
+            this.XcLeftVersion.Width = 110;
+            // 
+            // XcDirection
+            // 
+            this.XcDirection.DataPropertyName = "Direction";
+            this.XcDirection.HeaderText = "Direction";
+            this.XcDirection.MinimumWidth = 110;
+            this.XcDirection.Name = "XcDirection";
+            this.XcDirection.Width = 110;
+            // 
+            // XcRightVersion
+            // 
+            this.XcRightVersion.DataPropertyName = "SourceVersion";
+            this.XcRightVersion.HeaderText = "Source version";
+            this.XcRightVersion.MinimumWidth = 110;
+            this.XcRightVersion.Name = "XcRightVersion";
+            this.XcRightVersion.ReadOnly = true;
+            this.XcRightVersion.Width = 110;
+            // 
+            // XuSynch
+            // 
+            this.XuSynch.Location = new System.Drawing.Point(573, 945);
+            this.XuSynch.Name = "XuSynch";
+            this.XuSynch.Size = new System.Drawing.Size(75, 23);
+            this.XuSynch.TabIndex = 8;
+            this.XuSynch.Text = "<<<---";
+            this.XuSynch.UseVisualStyleBackColor = true;
+            this.XuSynch.Click += new System.EventHandler(this.XuSynch_Click);
+            // 
+            // XuClose
+            // 
+            this.XuClose.Location = new System.Drawing.Point(573, 1002);
+            this.XuClose.Name = "XuClose";
+            this.XuClose.Size = new System.Drawing.Size(75, 23);
+            this.XuClose.TabIndex = 9;
+            this.XuClose.Text = "Close";
+            this.XuClose.UseVisualStyleBackColor = true;
+            this.XuClose.Click += new System.EventHandler(this.XuClose_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(394, 300);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(60, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "File version";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.XuShowNewer);
+            this.groupBox1.Controls.Add(this.XuShowEqual);
+            this.groupBox1.Controls.Add(this.XuShowOlder);
+            this.groupBox1.Location = new System.Drawing.Point(289, 223);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(530, 54);
+            this.groupBox1.TabIndex = 11;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Show the following ";
+            // 
+            // XuShowOlder
+            // 
+            this.XuShowOlder.AutoSize = true;
+            this.XuShowOlder.Checked = true;
+            this.XuShowOlder.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.XuShowOlder.Location = new System.Drawing.Point(21, 20);
+            this.XuShowOlder.Name = "XuShowOlder";
+            this.XuShowOlder.Size = new System.Drawing.Size(53, 17);
+            this.XuShowOlder.TabIndex = 0;
+            this.XuShowOlder.Text = "--->>>";
+            this.XuShowOlder.UseVisualStyleBackColor = true;
+            this.XuShowOlder.CheckedChanged += new System.EventHandler(this.XuTest1_Click);
+            // 
+            // XuShowEqual
+            // 
+            this.XuShowEqual.AutoSize = true;
+            this.XuShowEqual.Checked = true;
+            this.XuShowEqual.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.XuShowEqual.Location = new System.Drawing.Point(192, 20);
+            this.XuShowEqual.Name = "XuShowEqual";
+            this.XuShowEqual.Size = new System.Drawing.Size(38, 17);
+            this.XuShowEqual.TabIndex = 1;
+            this.XuShowEqual.Text = "==";
+            this.XuShowEqual.UseVisualStyleBackColor = true;
+            this.XuShowEqual.CheckedChanged += new System.EventHandler(this.XuTest1_Click);
+            // 
+            // XuShowNewer
+            // 
+            this.XuShowNewer.AutoSize = true;
+            this.XuShowNewer.Checked = true;
+            this.XuShowNewer.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.XuShowNewer.Location = new System.Drawing.Point(377, 20);
+            this.XuShowNewer.Name = "XuShowNewer";
+            this.XuShowNewer.Size = new System.Drawing.Size(53, 17);
+            this.XuShowNewer.TabIndex = 3;
+            this.XuShowNewer.Text = "<<<---";
+            this.XuShowNewer.UseVisualStyleBackColor = true;
+            this.XuShowNewer.CheckedChanged += new System.EventHandler(this.XuTest1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(877, 607);
+            this.ClientSize = new System.Drawing.Size(877, 1054);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.XuClose);
+            this.Controls.Add(this.XuSynch);
             this.Controls.Add(this.XuSourceFolderBrowse);
             this.Controls.Add(this.XuTargetFolderBrowse);
             this.Controls.Add(this.XuSourceFolder);
@@ -180,6 +272,8 @@
             this.Text = "SynchUpdatedFiles";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.XuTable)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,10 +283,6 @@
 
         private System.Windows.Forms.DataGridView XuTable;
         private System.Windows.Forms.Button XuTest1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn XcFilename;
-        private System.Windows.Forms.DataGridViewTextBoxColumn XcLeftVersion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn XcDirection;
-        private System.Windows.Forms.DataGridViewTextBoxColumn XcRightVersion;
         private System.Windows.Forms.FolderBrowserDialog XuFolderBrowser;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox XuTargetFolder;
@@ -200,6 +290,17 @@
         private System.Windows.Forms.TextBox XuSourceFolder;
         private System.Windows.Forms.Button XuTargetFolderBrowse;
         private System.Windows.Forms.Button XuSourceFolderBrowse;
+        private System.Windows.Forms.DataGridViewTextBoxColumn XcFilename;
+        private System.Windows.Forms.DataGridViewTextBoxColumn XcLeftVersion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn XcDirection;
+        private System.Windows.Forms.DataGridViewTextBoxColumn XcRightVersion;
+        private System.Windows.Forms.Button XuSynch;
+        private System.Windows.Forms.Button XuClose;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox XuShowNewer;
+        private System.Windows.Forms.CheckBox XuShowEqual;
+        private System.Windows.Forms.CheckBox XuShowOlder;
 
     }
 }

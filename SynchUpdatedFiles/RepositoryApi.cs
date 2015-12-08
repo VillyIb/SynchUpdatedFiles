@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Remoting.Messaging;
 
@@ -21,10 +22,12 @@ namespace SynchUpdatedFiles
 
         public int Private { get; set; }
 
+        public String ProductVersion { get; set; }
 
         public int CompareTo(FileVersion other)
         {
-            var result = Major.CompareTo(other.Major);
+            var result = String.Compare(ProductVersion, other.ProductVersion, StringComparison.Ordinal);
+            result = result == 0 ? Major.CompareTo(other.Major) : result;
             result = result == 0 ? Minor.CompareTo(other.Minor) : result;
             result = result == 0 ? Build.CompareTo(other.Build) : result;
             result = result == 0 ? Private.CompareTo(other.Private) : result;
@@ -34,7 +37,7 @@ namespace SynchUpdatedFiles
 
         public override string ToString()
         {
-            return string.Format("{0}.{1}.{2}.{3}", Major, Minor, Build, Private);
+            return string.Format("{4} / {0}.{1}.{2}.{3}", Major, Minor, Build, Private, ProductVersion);
         }
     }
 
@@ -54,8 +57,6 @@ namespace SynchUpdatedFiles
     public class RepositoryApi
     {
 
-
-
         public static bool Read(out FileVersion fileVersion, string directory, string filename)
         {
             var result = false;
@@ -67,13 +68,13 @@ namespace SynchUpdatedFiles
             if (fi.Exists)
             {
                 var t1 = FileVersionInfo.GetVersionInfo(fi.FullName);
-                var t2 = t1.FileVersion.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                
+                fileVersion.ProductVersion = t1.ProductVersion;
 
-                int t3;
-                fileVersion.Major = int.TryParse(t2[0], out t3) ? t3 : 0;
-                fileVersion.Minor = int.TryParse(t2[1], out t3) ? t3 : 0;
-                fileVersion.Build = int.TryParse(t2[2], out t3) ? t3 : 0;
-                fileVersion.Private = t2.Length > 3 ? (int.TryParse(t2[3], out t3) ? t3 : 0) : 0;
+                fileVersion.Major = t1.FileMajorPart;
+                fileVersion.Minor = t1.FileMinorPart;
+                fileVersion.Build = t1.FileBuildPart;
+                fileVersion.Private = t1.FilePrivatePart;
 
                 result = true;
             }

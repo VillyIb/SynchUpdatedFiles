@@ -167,12 +167,9 @@ namespace SynchUpdatedFiles
                 Table.Add(
                     new Row
                     {
-                        Direction = MapDirection(direction)
-                        ,
-                        Filename = fileMetadata.Filename
-                        ,
-                        TargetVersion = fileMetadata.FileVersionTarget.ToString()
-                        ,
+                        Direction = MapDirection(direction),
+                        Filename = fileMetadata.Filename,
+                        TargetVersion = fileMetadata.FileVersionTarget.ToString(),
                         SourceVersion = fileMetadata.FileVersionSource.ToString()
                     }
                 );

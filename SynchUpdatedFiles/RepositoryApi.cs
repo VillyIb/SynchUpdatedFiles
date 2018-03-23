@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Runtime.Remoting.Messaging;
+using System.Text;
 
 namespace SynchUpdatedFiles
 {
@@ -56,54 +53,113 @@ namespace SynchUpdatedFiles
 
     public class RepositoryApi
     {
+        private static StringBuilder Logger = new StringBuilder();
 
-        public static bool Read(out FileVersion fileVersion, string directory, string filename)
+        public string GetLogger
         {
-            var result = false;
-
-            fileVersion = new FileVersion();
-
-            var fullpath = Path.Combine(directory, filename);
-            var fi = new FileInfo(fullpath);
-            if (fi.Exists)
-            {
-                var t1 = FileVersionInfo.GetVersionInfo(fi.FullName);
-                
-                fileVersion.ProductVersion = t1.ProductVersion;
-
-                fileVersion.Major = t1.FileMajorPart;
-                fileVersion.Minor = t1.FileMinorPart;
-                fileVersion.Build = t1.FileBuildPart;
-                fileVersion.Private = t1.FilePrivatePart;
-
-                result = true;
-            }
-
-            return result;
+            get { return Logger.ToString(); }
         }
 
-        public static bool ReadDeep(out FileVersion fileVersion, string directory, string filename, out DirectoryInfo sourceDirectory)
+
+        private static bool Read(out FileVersion fileVersion, string directory, string filename)
         {
-            var di = new DirectoryInfo(directory);
-            var fileList = di.GetFiles(filename, SearchOption.AllDirectories);
+            var start = DateTime.Now;
+            Logger.AppendFormat("{0}Read start: {1:HH:mm:ss.fff}", Environment.NewLine, start);
 
-            var filter = String.Format("\\{0}\\obj\\Release", Path.GetFileNameWithoutExtension(filename));
-            filter = String.Format("\\obj\\Release\\{0}", filename);
-            var f2 = fileList.Where(t => t.FullName.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-
-            if (f2.Count == 1)
+            try
             {
-                var current = f2[0];
-                var found = Read(out fileVersion, current.DirectoryName, filename);
+                var result = false;
 
-                sourceDirectory = new DirectoryInfo(current.DirectoryName);
+                fileVersion = new FileVersion();
 
-                return found;
+                var fullpath = Path.Combine(directory, filename);
+                var fi = new FileInfo(fullpath);
+                if (fi.Exists)
+                {
+                    var t1 = FileVersionInfo.GetVersionInfo(fi.FullName);
+
+                    fileVersion.ProductVersion = t1.ProductVersion;
+
+                    fileVersion.Major = t1.FileMajorPart;
+                    fileVersion.Minor = t1.FileMinorPart;
+                    fileVersion.Build = t1.FileBuildPart;
+                    fileVersion.Private = t1.FilePrivatePart;
+
+                    result = true;
+                }
+
+                return result;
             }
 
-            sourceDirectory = null;
-            fileVersion = null;
-            return false;
+            finally
+            {
+                var stop = DateTime.Now;
+                var duration = stop.Subtract(start);
+                Logger.AppendFormat("{0}Read  stop: {1:HH:mm:ss.fff}, Duration: {2} ms", Environment.NewLine, stop, duration.Milliseconds);
+            }
+        }
+
+
+        private List<FileInfo> zAllDllS;
+        private List<FileInfo> AllDllS
+        {
+            get
+            {
+                if (null != zAllDllS) { return zAllDllS; }
+
+                zAllDllS = SourceDirectory.GetFiles("*.dll", SearchOption.AllDirectories).ToList();
+
+                return zAllDllS;
+            }
+        }
+
+
+        private List<FileInfo> GetFiles(string filename)
+        {
+            return AllDllS.Where(t => filename.Equals(t.Name)).ToList();
+        }
+
+
+        private bool ReadDeep(out FileVersion fileVersion, string directory, string filename, out DirectoryInfo sourceDirectory)
+        {
+            var start = DateTime.Now;
+            Logger.AppendFormat("{0}ReadDeep start: {1:HH:mm:ss.fff}", Environment.NewLine, start);
+
+            try
+            {
+                //var di = new DirectoryInfo(directory);
+                //var fileList = di.GetFiles(filename, SearchOption.AllDirectories);
+                var fileList = GetFiles(filename);
+                {
+                    var stop = DateTime.Now;
+                    var duration = stop.Subtract(start);
+                    Logger.AppendFormat("{0}ReadDeep  mmmm: {1:HH:mm:ss.fff}, Duration: {2} ms", Environment.NewLine, stop, duration.Milliseconds);
+                }
+
+                var filter = String.Format("\\obj\\Release\\{0}", filename);
+                var f2 = fileList.Where(t => t.FullName.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+
+                if (f2.Count == 1)
+                {
+                    var current = f2[0];
+                    var found = Read(out fileVersion, current.DirectoryName, filename);
+
+                    sourceDirectory = new DirectoryInfo(current.DirectoryName);
+
+                    return found;
+                }
+
+                sourceDirectory = null;
+                fileVersion = null;
+                return false;
+            }
+
+            finally
+            {
+                var stop = DateTime.Now;
+                var duration = stop.Subtract(start);
+                Logger.AppendFormat("{0}ReadDeep  stop: {1:HH:mm:ss.fff}, Duration: {2} ms", Environment.NewLine, stop, duration.Milliseconds);
+            }
         }
 
 
@@ -111,38 +167,49 @@ namespace SynchUpdatedFiles
 
         public DirectoryInfo SourceDirectory { get; set; }
 
-        public List<FileMetadata> FileList { get; set; }
-
-        private List<FileInfo> TargetDirectoryList { get; set; }
+        public List<FileMetadata> TargetFileList { get; set; }
 
         public int Analyze()
         {
-            TargetDirectoryList = TargetDirectory.GetFiles("*.dll").ToList();
-            FileList = new List<FileMetadata>();
+            var start = DateTime.Now;
+            Logger.AppendFormat("{0}Analyze start: {1:HH:mm:ss.fff}", Environment.NewLine, start);
 
-            foreach (var fileInfo in TargetDirectoryList)
+            try
             {
-                var t1 = new FileMetadata();
-                FileVersion fv;
-                DirectoryInfo di;
+                var targetDirectoryList = TargetDirectory.GetFiles("*.dll").ToList();
+                TargetFileList = new List<FileMetadata>();
 
-                if (Read(out fv, TargetDirectory.FullName, fileInfo.Name))
+                foreach (var fileInfo in targetDirectoryList)
                 {
-                    t1.Filename = fileInfo.Name;
-                    t1.FileVersionTarget = fv;
+                    var t1 = new FileMetadata();
+                    FileVersion fv;
+                    DirectoryInfo di;
 
-
-                    if (ReadDeep(out fv, SourceDirectory.FullName, fileInfo.Name, out di))
+                    if (Read(out fv, TargetDirectory.FullName, fileInfo.Name))
                     {
-                        t1.FileVersionSource = fv;
-                        t1.DirectorySource = di;
-                        FileList.Add(t1);
+                        t1.Filename = fileInfo.Name;
+                        t1.FileVersionTarget = fv;
+
+
+                        if (ReadDeep(out fv, SourceDirectory.FullName, fileInfo.Name, out di))
+                        {
+                            t1.FileVersionSource = fv;
+                            t1.DirectorySource = di;
+                            TargetFileList.Add(t1);
+                        }
                     }
+
                 }
 
+                return TargetFileList.Count;
             }
 
-            return FileList.Count;
+            finally
+            {
+                var stop = DateTime.Now;
+                var duration = stop.Subtract(start);
+                Logger.AppendFormat("{0}Analyze  stop: {1:HH:mm:ss.fff}, Duration: {2} ms", Environment.NewLine, stop, duration.Milliseconds);
+            }
         }
 
         //public int Synchronize()

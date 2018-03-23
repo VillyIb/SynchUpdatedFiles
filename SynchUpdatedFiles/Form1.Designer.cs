@@ -30,6 +30,10 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.XuTable = new System.Windows.Forms.DataGridView();
+            this.XcFilename = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.XcLeftVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.XcDirection = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.XcRightVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.XuTest1 = new System.Windows.Forms.Button();
             this.XuFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.label1 = new System.Windows.Forms.Label();
@@ -45,10 +49,6 @@
             this.XuShowNewer = new System.Windows.Forms.CheckBox();
             this.XuShowEqual = new System.Windows.Forms.CheckBox();
             this.XuShowOlder = new System.Windows.Forms.CheckBox();
-            this.XcFilename = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.XcLeftVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.XcDirection = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.XcRightVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.XuTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -70,6 +70,45 @@
             this.XuTable.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.XuTable_CellDoubleClick);
             this.XuTable.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.XuTable_CellMouseClick);
             this.XuTable.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.XuTable_CellMouseDoubleClick);
+            // 
+            // XcFilename
+            // 
+            this.XcFilename.DataPropertyName = "Filename";
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Yellow;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Blue;
+            this.XcFilename.DefaultCellStyle = dataGridViewCellStyle2;
+            this.XcFilename.HeaderText = "Filename";
+            this.XcFilename.MinimumWidth = 250;
+            this.XcFilename.Name = "XcFilename";
+            this.XcFilename.ReadOnly = true;
+            this.XcFilename.Width = 300;
+            // 
+            // XcLeftVersion
+            // 
+            this.XcLeftVersion.DataPropertyName = "TargetVersion";
+            this.XcLeftVersion.HeaderText = "Target";
+            this.XcLeftVersion.MinimumWidth = 150;
+            this.XcLeftVersion.Name = "XcLeftVersion";
+            this.XcLeftVersion.ReadOnly = true;
+            this.XcLeftVersion.Width = 150;
+            // 
+            // XcDirection
+            // 
+            this.XcDirection.DataPropertyName = "Direction";
+            this.XcDirection.HeaderText = "Direction";
+            this.XcDirection.MinimumWidth = 110;
+            this.XcDirection.Name = "XcDirection";
+            this.XcDirection.ReadOnly = true;
+            this.XcDirection.Width = 110;
+            // 
+            // XcRightVersion
+            // 
+            this.XcRightVersion.DataPropertyName = "SourceVersion";
+            this.XcRightVersion.HeaderText = "Source";
+            this.XcRightVersion.MinimumWidth = 150;
+            this.XcRightVersion.Name = "XcRightVersion";
+            this.XcRightVersion.ReadOnly = true;
+            this.XcRightVersion.Width = 150;
             // 
             // XuTest1
             // 
@@ -213,45 +252,6 @@
             this.XuShowOlder.UseVisualStyleBackColor = true;
             this.XuShowOlder.CheckedChanged += new System.EventHandler(this.XuTest1_Click);
             // 
-            // XcFilename
-            // 
-            this.XcFilename.DataPropertyName = "Filename";
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Yellow;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Blue;
-            this.XcFilename.DefaultCellStyle = dataGridViewCellStyle2;
-            this.XcFilename.HeaderText = "Filename";
-            this.XcFilename.MinimumWidth = 250;
-            this.XcFilename.Name = "XcFilename";
-            this.XcFilename.ReadOnly = true;
-            this.XcFilename.Width = 300;
-            // 
-            // XcLeftVersion
-            // 
-            this.XcLeftVersion.DataPropertyName = "TargetVersion";
-            this.XcLeftVersion.HeaderText = "Target";
-            this.XcLeftVersion.MinimumWidth = 150;
-            this.XcLeftVersion.Name = "XcLeftVersion";
-            this.XcLeftVersion.ReadOnly = true;
-            this.XcLeftVersion.Width = 150;
-            // 
-            // XcDirection
-            // 
-            this.XcDirection.DataPropertyName = "Direction";
-            this.XcDirection.HeaderText = "Direction";
-            this.XcDirection.MinimumWidth = 110;
-            this.XcDirection.Name = "XcDirection";
-            this.XcDirection.ReadOnly = true;
-            this.XcDirection.Width = 110;
-            // 
-            // XcRightVersion
-            // 
-            this.XcRightVersion.DataPropertyName = "SourceVersion";
-            this.XcRightVersion.HeaderText = "Source";
-            this.XcRightVersion.MinimumWidth = 150;
-            this.XcRightVersion.Name = "XcRightVersion";
-            this.XcRightVersion.ReadOnly = true;
-            this.XcRightVersion.Width = 150;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -302,7 +302,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn XcLeftVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn XcDirection;
         private System.Windows.Forms.DataGridViewTextBoxColumn XcRightVersion;
-
     }
 }
 

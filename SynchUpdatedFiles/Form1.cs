@@ -43,6 +43,11 @@ namespace SynchUpdatedFiles
 
         private void XuTable_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            XuTable.BeginEdit(true);
+
+            ChangeDirection(e.RowIndex);
+
+            XuTable.EndEdit();
         }
 
         private void XuTable_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -54,23 +59,24 @@ namespace SynchUpdatedFiles
             if (rowIndex < 0) { return; }
             var row = Table[rowIndex];
 
-            //switch (row.Direction)
-            //{
-            //    case Direction.Identical:
-            //        row.Direction = Direction.Left;
-            //        break;
+            var direction = MapDirection(row.Direction);
 
-            //    case Direction.Left:
-            //        row.Direction = Direction.Right;
-            //        break;
+            switch (direction)
+            {
+                case Direction.Identical:
+                    row.Direction = MapDirection(Direction.Left);
+                    break;
 
-            //    case Direction.Right:
-            //        row.Direction = Direction.Identical;
-            //        break;
-            //}
+                case Direction.Left:
+                    row.Direction = MapDirection(Direction.Right);
+                    break;
 
+                case Direction.Right:
+                    row.Direction = MapDirection(Direction.Identical);
+                    break;
+            }
 
-            //Update();
+            Update();
         }
 
 
@@ -91,19 +97,33 @@ namespace SynchUpdatedFiles
             {
                 case Direction.Identical:
                     return "==";
-                    break;
 
                 case Direction.Left:
                     return "<<<---";
-                    break;
 
                 case Direction.Right:
                     return "--->>>";
-                    break;
 
                 default:
                     return "--->>><<<---";
-                    break;
+            }
+        }
+
+        private static Direction MapDirection(String value)
+        {
+            switch (value)
+            {
+                case "==":
+                    return Direction.Identical;
+
+                case "<<<---":
+                    return Direction.Left;
+
+                case "--->>>":
+                    return Direction.Right;
+
+                default:
+                    return Direction.Identical;
             }
         }
 
@@ -118,7 +138,7 @@ namespace SynchUpdatedFiles
 
             var api = new RepositoryApi { TargetDirectory = target, SourceDirectory = source };
             var filecount = api.Analyze();
-            var x = api.FileList;
+            var x = api.TargetFileList;
 
             var z1 = x;
             var z2 = filecount;
@@ -182,7 +202,9 @@ namespace SynchUpdatedFiles
             Update();
 
             XuTest1.Enabled = true;
+            Clipboard.SetText(api.GetLogger);
         }
+
 
         private void XuTargetFolderBrowse_Click(object sender, EventArgs e)
         {
@@ -207,10 +229,20 @@ namespace SynchUpdatedFiles
 
         private void XuSynch_Click(object sender, EventArgs e)
         {
-            foreach (var current in UnequalFileList)
+
+            for(var index = 0; index< UnequalFileList.Count ;index++)
+            
+            //foreach (var current in UnequalFileList)
             {
-                var compare = current.FileVersionTarget.CompareTo(current.FileVersionSource);
-                if (compare < 0)
+                var current = UnequalFileList[index];
+
+                var row = XuTable.Rows[index];
+                var direction = (row.DataBoundItem as Row).Direction;
+
+                //var compare = current.FileVersionTarget.CompareTo(current.FileVersionSource);
+                //if (compare < 0)
+
+                if(Direction.Left == MapDirection(direction))
                 {
                     var source = new FileInfo(Path.Combine(current.DirectorySource.FullName, current.Filename));
                     var target = new FileInfo(Path.Combine(XuTargetFolder.Text, current.Filename));
@@ -232,6 +264,7 @@ namespace SynchUpdatedFiles
                     }
 
                 }
+
             }
 
             XuTest1_Click(sender, e);
@@ -241,7 +274,6 @@ namespace SynchUpdatedFiles
         {
             Close();
         }
-
 
     }
 }
